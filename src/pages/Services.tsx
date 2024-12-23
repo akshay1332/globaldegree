@@ -11,46 +11,132 @@ gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
-    title: "University Selection & Application",
-    description: "Expert guidance in choosing the right university and program. We handle the entire application process with precision and care.",
+    id: 1,
+    title: 'Study in USA',
+    description: 'Experience world-class education at prestigious universities like Harvard, MIT, and Stanford. Benefit from cutting-edge research facilities, diverse campus life, and extensive networking opportunities. Optional Practical Training (OPT) allows for valuable work experience.',
     icon: GraduationCap,
-    color: "from-purple-600 to-indigo-600",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2071&auto=format&fit=crop"
+    bgColor: 'from-purple-900/80 to-indigo-900/80',
+    image: 'https://images.unsplash.com/photo-1589758443446-7194ba33ce35?q=80&w=2070&auto=format&fit=crop',
+    features: [
+      'Flexible credit system',
+      'Research opportunities',
+      'Cultural diversity',
+      'Campus activities',
+      'Work while studying'
+    ],
+    position: 'center'
   },
   {
-    title: "Course Counselling",
-    description: "Personalized counseling to align your academic goals with the best available courses worldwide.",
-    icon: BookOpen,
-    color: "from-indigo-600 to-blue-600",
-    image: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop"
+    id: 2,
+    title: 'Study in UK',
+    description: 'Join prestigious institutions like Oxford, Cambridge, and Imperial College. Benefit from shorter course duration, rich cultural heritage, and high academic standards. Post-study work visa opportunities available for graduates.',
+    icon: GraduationCap,
+    bgColor: 'from-indigo-900/80 to-blue-900/80',
+    image: 'https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?q=80&w=1887&auto=format&fit=crop',
+    features: [
+      'Shorter programs',
+      'Global recognition',
+      'Research excellence',
+      'Historic institutions',
+      'Post-study work visa'
+    ],
+    position: 'center'
   },
   {
-    title: "Documentation Support",
-    description: "Comprehensive assistance with visa applications, SOPs, LORs, and all necessary paperwork.",
-    icon: FileCheck,
-    color: "from-blue-600 to-cyan-600",
-    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop"
+    id: 3,
+    title: 'Study in Australia',
+    description: 'Enjoy high-quality education at universities like Melbourne, Sydney, and ANU. Experience amazing weather, friendly culture, and excellent quality of life. Post-study work rights up to 4 years available for graduates.',
+    icon: GraduationCap,
+    bgColor: 'from-blue-900/80 to-cyan-900/80',
+    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=2030&auto=format&fit=crop',
+    features: [
+      'Work opportunities',
+      'Beautiful campus life',
+      'Safe environment',
+      'Quality education',
+      'Multicultural society'
+    ],
+    position: 'center'
   },
   {
-    title: "Travel & Accommodation",
-    description: "End-to-end support for travel arrangements and finding suitable accommodation abroad.",
-    icon: Plane,
-    color: "from-cyan-600 to-teal-600",
-    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop"
+    id: 4,
+    title: 'Study in Ireland',
+    description: 'Study in the land of saints and scholars at top institutions like Trinity College Dublin. Enjoy the perfect blend of traditional values and modern innovation. Two-year stay-back option for international graduates.',
+    icon: GraduationCap,
+    bgColor: 'from-cyan-900/80 to-teal-900/80',
+    image: 'https://images.unsplash.com/photo-1564959130747-897fb406b9af?q=80&w=1974&auto=format&fit=crop',
+    features: [
+      'English-speaking country',
+      'Rich cultural heritage',
+      'Innovation hub',
+      'Welcoming atmosphere',
+      'Post-study opportunities'
+    ],
+    position: 'center'
   },
   {
-    title: "Campus Life Preparation",
-    description: "Detailed orientation about campus life, cultural adjustment, and academic expectations.",
-    icon: Building2,
-    color: "from-teal-600 to-green-600",
-    image: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?q=80&w=2070&auto=format&fit=crop"
+    id: 5,
+    title: 'Study in Canada',
+    description: 'Experience world-class education at universities like Toronto, McGill, and UBC. Enjoy high living standards, multicultural environment, and excellent post-graduation work opportunities. Up to 3 years post-study work permit available.',
+    icon: GraduationCap,
+    bgColor: 'from-teal-900/80 to-emerald-900/80',
+    image: 'https://images.unsplash.com/photo-1569581726100-c129ae0fc669?q=80&w=1974&auto=format&fit=crop',
+    features: [
+      'Quality education',
+      'Safe environment',
+      'Work opportunities',
+      'Healthcare benefits',
+      'Immigration pathways'
+    ],
+    position: 'center'
   },
   {
-    title: "Global Network Access",
-    description: "Connect with our vast network of alumni and partner institutions worldwide.",
-    icon: Globe,
-    color: "from-green-600 to-emerald-600",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop"
+    id: 6,
+    title: 'Study in New Zealand',
+    description: 'Study in a country known for innovation and research at universities like Auckland and Otago. Experience stunning landscapes, friendly people, and excellent work-life balance. Post-study work rights available for graduates.',
+    icon: GraduationCap,
+    bgColor: 'from-emerald-900/80 to-green-900/80',
+    image: 'https://images.unsplash.com/photo-1589665653391-c891dd93f6c6?q=80&w=1974&auto=format&fit=crop',
+    features: [
+      'Quality lifestyle',
+      'Research excellence',
+      'Practical learning',
+      'Work opportunities',
+      'Beautiful environment'
+    ],
+    position: 'center'
+  },
+  {
+    id: 7,
+    title: 'Study in Germany',
+    description: 'Access tuition-free education at top institutions like TU Munich and Heidelberg University. Experience excellence in engineering, technology, and innovation. 18-month job seeker visa available after graduation.',
+    icon: GraduationCap,
+    bgColor: 'from-green-900/80 to-lime-900/80',
+    image: 'https://images.unsplash.com/photo-1599928020632-ad30583799ea?q=80&w=1974&auto=format&fit=crop',
+    features: [
+      'No/Low tuition fees',
+      'Strong economy',
+      'Research opportunities',
+      'Industry connections',
+      'Work permits'
+    ],
+    position: 'center'
+  },
+  {
+    id: 8,
+    title: 'Study in France',
+    description: 'Study in the heart of Europe at prestigious institutions like Sorbonne and École Polytechnique. Experience rich culture, art, and history while getting world-class education. Two-year post-study work permit available.',
+    icon: GraduationCap,
+    bgColor: 'from-lime-900/80 to-purple-900/80',
+    image: 'https://images.unsplash.com/photo-1522093007474-d86e9bf7ba6f?q=80&w=2000&auto=format&fit=crop',
+    features: [
+      'Cultural experience',
+      'Historic institutions',
+      'Research excellence',
+      'Art and innovation',
+      'Central location'
+    ],
+    position: 'center'
   }
 ];
 
@@ -78,7 +164,7 @@ const ServiceCard = ({ service, index }: any) => {
           className="absolute inset-0 bg-cover bg-center transform transition-transform duration-700 group-hover:scale-110"
           style={{ backgroundImage: `url(${service.image})` }}
         />
-        <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-90 group-hover:opacity-95 transition-opacity duration-300`} />
+        <div className={`absolute inset-0 bg-gradient-to-br ${service.bgColor} opacity-90 group-hover:opacity-95 transition-opacity duration-300`} />
       </div>
 
       {/* Content */}
@@ -93,6 +179,11 @@ const ServiceCard = ({ service, index }: any) => {
           </div>
           <h3 className="text-2xl font-bold text-white mb-4">{service.title}</h3>
           <p className="text-white/90">{service.description}</p>
+          <ul className="text-white/90 mt-4">
+            {service.features.map((feature, index) => (
+              <li key={index} className="mb-2">{feature}</li>
+            ))}
+          </ul>
         </motion.div>
 
         <motion.div

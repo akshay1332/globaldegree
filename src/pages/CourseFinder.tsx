@@ -12,15 +12,40 @@ const CourseFinder = () => {
   const y = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   const [formData, setFormData] = useState({
-    desiredCourse: '',
-    desiredCountry: '',
-    budget: '',
-    preferredUniversity: '',
-    academicScore: '',
-    englishScore: '',
-    workExperience: '',
-    specialization: ''
+    fullName: '',
+    mobileNumber: '',
+    email: '',
+    courseName: '',
+    interestedCountry: '',
+    intendedYear: '',
+    bachelorsDegree: '',
+    bachelorsStream: '',
+    bachelorsPercentage: '',
+    bachelorsPassoutYear: '',
+    backlogs: '',
+    interPercentage: '',
+    interPassoutYear: '',
+    englishProficiency: '',
+    greScore: '',
+    applyingFrom: '',
+    tuitionFeeRange: ''
   });
+
+  const countries = [
+    'USA', 'UK', 'Canada', 'Australia', 'New Zealand', 'Germany', 'Ireland', 'Singapore'
+  ];
+
+  const applyingFromOptions = [
+    'Home Country', 'Already in Destination Country', 'Other Country'
+  ];
+
+  const feeRanges = [
+    '10,000 - 15,000 USD',
+    '15,000 - 20,000 USD',
+    '20,000 - 25,000 USD',
+    '25,000 - 30,000 USD',
+    '30,000+ USD'
+  ];
 
   const features = [
     {
@@ -221,209 +246,287 @@ const CourseFinder = () => {
       </div>
 
       {/* Form Section */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="max-w-4xl mx-auto px-4 py-16 relative z-10">
         <motion.form 
           onSubmit={handleSubmit}
-          className="max-w-4xl mx-auto"
-          initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          className="bg-[#2A2A5A]/50 backdrop-blur-xl p-8 rounded-2xl shadow-xl"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          {/* Progress Steps */}
-          <div className="mb-12">
-            <div className="flex justify-between mb-4">
-              {[1, 2, 3].map((step) => (
-                <motion.div
-                  key={step}
-                  className={`relative ${step <= currentStep ? 'text-[#FFD700]' : 'text-white/50'}`}
-                  whileHover={{ scale: 1.1 }}
-                >
-                  <motion.div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                      step <= currentStep ? 'bg-[#FFD700]/20' : 'bg-white/10'
-                    }`}
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    {step <= currentStep ? (
-                      <CheckCircle2 className="w-6 h-6" />
-                    ) : (
-                      <span>{step}</span>
-                    )}
-                  </motion.div>
-                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap text-sm">
-                    Step {step}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-            <div className="h-2 bg-white/10 rounded-full mt-8">
-              <motion.div
-                className="h-full bg-[#FFD700] rounded-full"
-                initial={{ width: "0%" }}
-                animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
-                transition={{ duration: 0.3 }}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Full Name */}
+            <div>
+              <label htmlFor="fullName" className={labelClasses}>Full Name *</label>
+              <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                placeholder="Enter Full name"
+                value={formData.fullName}
+                onChange={handleChange}
+                required
+                className={inputClasses}
               />
             </div>
+
+            {/* Mobile Number */}
+            <div>
+              <label htmlFor="mobileNumber" className={labelClasses}>Mobile Number *</label>
+              <input
+                type="tel"
+                id="mobileNumber"
+                name="mobileNumber"
+                placeholder="Enter mobile number"
+                value={formData.mobileNumber}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className={labelClasses}>E-mail *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter E-mail"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Course Name */}
+            <div>
+              <label htmlFor="courseName" className={labelClasses}>Course Name *</label>
+              <input
+                type="text"
+                id="courseName"
+                name="courseName"
+                placeholder="Enter course name"
+                value={formData.courseName}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Interested Country */}
+            <div>
+              <label htmlFor="interestedCountry" className={labelClasses}>Interested Country *</label>
+              <select
+                id="interestedCountry"
+                name="interestedCountry"
+                value={formData.interestedCountry}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              >
+                <option value="">Please select</option>
+                {countries.map((country) => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Intended Year */}
+            <div>
+              <label htmlFor="intendedYear" className={labelClasses}>Intended Year *</label>
+              <input
+                type="month"
+                id="intendedYear"
+                name="intendedYear"
+                placeholder="Select month and year"
+                value={formData.intendedYear}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Bachelors Degree */}
+            <div>
+              <label htmlFor="bachelorsDegree" className={labelClasses}>Bachelors Degree *</label>
+              <input
+                type="text"
+                id="bachelorsDegree"
+                name="bachelorsDegree"
+                placeholder="Enter degree"
+                value={formData.bachelorsDegree}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Bachelors Stream */}
+            <div>
+              <label htmlFor="bachelorsStream" className={labelClasses}>Bachelors Stream *</label>
+              <input
+                type="text"
+                id="bachelorsStream"
+                name="bachelorsStream"
+                placeholder="Enter Stream"
+                value={formData.bachelorsStream}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Bachelors Percentage */}
+            <div>
+              <label htmlFor="bachelorsPercentage" className={labelClasses}>Bachelors Percentage or CGPA *</label>
+              <input
+                type="text"
+                id="bachelorsPercentage"
+                name="bachelorsPercentage"
+                placeholder="Enter percentage or CGPA"
+                value={formData.bachelorsPercentage}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Bachelors Passout Year */}
+            <div>
+              <label htmlFor="bachelorsPassoutYear" className={labelClasses}>Bachelors Pass Out Year *</label>
+              <input
+                type="text"
+                id="bachelorsPassoutYear"
+                name="bachelorsPassoutYear"
+                placeholder="Enter year"
+                value={formData.bachelorsPassoutYear}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Backlogs */}
+            <div>
+              <label htmlFor="backlogs" className={labelClasses}>Backlogs in Degree</label>
+              <input
+                type="text"
+                id="backlogs"
+                name="backlogs"
+                placeholder="Enter if any"
+                value={formData.backlogs}
+                onChange={handleChange}
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Inter Percentage */}
+            <div>
+              <label htmlFor="interPercentage" className={labelClasses}>Inter Percentage or CGPA *</label>
+              <input
+                type="text"
+                id="interPercentage"
+                name="interPercentage"
+                placeholder="Enter percentage or CGPA"
+                value={formData.interPercentage}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Inter Passout Year */}
+            <div>
+              <label htmlFor="interPassoutYear" className={labelClasses}>Inter Pass Out Year *</label>
+              <input
+                type="text"
+                id="interPassoutYear"
+                name="interPassoutYear"
+                placeholder="Enter year"
+                value={formData.interPassoutYear}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* English Proficiency */}
+            <div>
+              <label htmlFor="englishProficiency" className={labelClasses}>English Proficiency Test</label>
+              <input
+                type="text"
+                id="englishProficiency"
+                name="englishProficiency"
+                placeholder="Enter Test name and Score"
+                value={formData.englishProficiency}
+                onChange={handleChange}
+                className={inputClasses}
+              />
+            </div>
+
+            {/* GRE Score */}
+            <div>
+              <label htmlFor="greScore" className={labelClasses}>GRE *</label>
+              <input
+                type="text"
+                id="greScore"
+                name="greScore"
+                placeholder="Enter Score"
+                value={formData.greScore}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              />
+            </div>
+
+            {/* Applying From */}
+            <div>
+              <label htmlFor="applyingFrom" className={labelClasses}>Applying From *</label>
+              <select
+                id="applyingFrom"
+                name="applyingFrom"
+                value={formData.applyingFrom}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              >
+                <option value="">Choose an option</option>
+                {applyingFromOptions.map((option) => (
+                  <option key={option} value={option}>{option}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Tuition Fee Range */}
+            <div>
+              <label htmlFor="tuitionFeeRange" className={labelClasses}>Tuition Fee Range *</label>
+              <select
+                id="tuitionFeeRange"
+                name="tuitionFeeRange"
+                value={formData.tuitionFeeRange}
+                onChange={handleChange}
+                required
+                className={inputClasses}
+              >
+                <option value="">Choose an option</option>
+                {feeRanges.map((range) => (
+                  <option key={range} value={range}>{range}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
-          {/* Form Content */}
-          <div className="bg-[#2A2A5A]/30 backdrop-blur-xl rounded-2xl p-8 shadow-2xl">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentStep}
-                initial={{ x: 300, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: -300, opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="space-y-6"
-              >
-                {currentStep === 1 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="desiredCourse" className={labelClasses}>Desired Course *</label>
-                      <motion.input
-                        whileFocus={{ scale: 1.02 }}
-                        type="text"
-                        id="desiredCourse"
-                        name="desiredCourse"
-                        placeholder="Enter Desired Course"
-                        className={inputClasses}
-                        value={formData.desiredCourse}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="desiredCountry" className={labelClasses}>Desired Country *</label>
-                      <motion.input
-                        whileFocus={{ scale: 1.02 }}
-                        type="text"
-                        id="desiredCountry"
-                        name="desiredCountry"
-                        placeholder="Enter Desired Country"
-                        className={inputClasses}
-                        value={formData.desiredCountry}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {currentStep === 2 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="academicScore" className={labelClasses}>Academic Score *</label>
-                      <motion.input
-                        whileFocus={{ scale: 1.02 }}
-                        type="text"
-                        id="academicScore"
-                        name="academicScore"
-                        placeholder="Enter Academic Score"
-                        className={inputClasses}
-                        value={formData.academicScore}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="englishScore" className={labelClasses}>English Test Score *</label>
-                      <motion.input
-                        whileFocus={{ scale: 1.02 }}
-                        type="text"
-                        id="englishScore"
-                        name="englishScore"
-                        placeholder="Enter English Test Score"
-                        className={inputClasses}
-                        value={formData.englishScore}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {currentStep === 3 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="budget" className={labelClasses}>Budget Range *</label>
-                      <motion.input
-                        whileFocus={{ scale: 1.02 }}
-                        type="text"
-                        id="budget"
-                        name="budget"
-                        placeholder="Enter Budget Range"
-                        className={inputClasses}
-                        value={formData.budget}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="preferredUniversity" className={labelClasses}>Preferred University</label>
-                      <motion.input
-                        whileFocus={{ scale: 1.02 }}
-                        type="text"
-                        id="preferredUniversity"
-                        name="preferredUniversity"
-                        placeholder="Enter Preferred University"
-                        className={inputClasses}
-                        value={formData.preferredUniversity}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Navigation Buttons */}
-            <motion.div 
-              className="flex justify-between mt-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <motion.button
-                type="button"
-                onClick={prevStep}
-                className={`group relative px-8 py-3 rounded-full overflow-hidden ${
-                  currentStep === 1 ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-                whileHover={currentStep !== 1 ? { scale: 1.05 } : {}}
-                whileTap={currentStep !== 1 ? { scale: 0.95 } : {}}
-                disabled={currentStep === 1}
-              >
-                <span className="relative z-10 flex items-center space-x-2 text-[#FFD700]">
-                  <span>Previous</span>
-                </span>
-                <motion.div
-                  className="absolute inset-0 bg-[#FFD700]/10 rounded-full"
-                  initial={{ scale: 0 }}
-                  whileHover={{ scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.button>
-
-              <motion.button
-                type={currentStep === totalSteps ? 'submit' : 'button'}
-                onClick={currentStep === totalSteps ? undefined : nextStep}
-                className="group relative px-8 py-3 rounded-full overflow-hidden"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <span className="relative z-10 flex items-center space-x-2 text-[#FFD700]">
-                  <span>{currentStep === totalSteps ? 'Find Courses' : 'Next'}</span>
-                </span>
-                <motion.div
-                  className="absolute inset-0 bg-[#FFD700]/10 rounded-full"
-                  initial={{ scale: 0 }}
-                  whileHover={{ scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.button>
-            </motion.div>
-          </div>
+          {/* Submit Button */}
+          <motion.button
+            type="submit"
+            className="mt-8 w-full bg-[#FFD700] text-[#1A1A40] py-4 rounded-lg font-semibold text-lg hover:bg-[#FFD700]/90 transition-all duration-300"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Submit Application
+          </motion.button>
         </motion.form>
       </div>
 
