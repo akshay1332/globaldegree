@@ -18,6 +18,11 @@ import SopBuilder from './pages/SopBuilder';
 import ContactUs from './pages/ContactUs';
 import Destination from './pages/Destination';
 import Home from './pages/Home';
+import VirtualCounselling from './pages/VirtualCounselling';
+import Blog from './pages/Blog';
+import GlobalSchools from './pages/GlobalSchools';
+import Eduevents from './pages/Eduevents';
+import TestimonialsPage from './pages/Testimonials';
 import { AnimatePresence } from 'framer-motion';
 
 function App() {
@@ -46,6 +51,11 @@ function App() {
           <Route path="/destination" element={<Destination />} />
           <Route path="/destinations/:country" element={<Destination />} />
           <Route path="/destinations/:country/:college" element={<Destination />} />
+          <Route path="/virtual-counselling" element={<VirtualCounselling />} />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/global-schools" element={<GlobalSchools />} />
+          <Route path="/eduevents" element={<Eduevents />} />
           <Route path="/" element={
             <>
               <Navbar />
