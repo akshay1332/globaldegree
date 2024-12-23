@@ -3,6 +3,7 @@ import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
+import Services from './components/Services';
 import Testimonials from './components/Testimonials';
 import HowItWorks from './components/HowItWorks';
 import FAQ from './components/FAQ';
@@ -30,6 +31,7 @@ function App() {
       <main className="bg-[var(--color-background)]">
         <Hero />
         <Features />
+        <Services />
         <Testimonials />
         <HowItWorks />
         <FAQ />
