@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { GraduationCap, Menu, X, Book, Lightbulb, Users, MessageCircle, Award, ChevronDown, ChevronRight } from 'lucide-react';
+import { GraduationCap, Menu, X, Book, Lightbulb, Users, MessageCircle, Award, ChevronDown, ChevronRight, Search, Globe } from 'lucide-react';
 import CustomCursor from './CustomCursor';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 interface College {
   name: string;
@@ -107,14 +107,39 @@ const Navbar = () => {
   const [cursorVariant, setCursorVariant] = useState('default');
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [hoveredDestination, setHoveredDestination] = useState<string | null>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showNavbar, setShowNavbar] = useState(true);
+  const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        const currentScrollY = window.scrollY;
+        
+        // Show navbar when scrolling up or at top
+        if (currentScrollY < lastScrollY || currentScrollY < 50) {
+          setShowNavbar(true);
+        } else {
+          setShowNavbar(false);
+        }
+
+        // Update scroll position
+        setLastScrollY(currentScrollY);
+        
+        // Update background
+        setIsScrolled(currentScrollY > 50);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+
+    window.addEventListener('scroll', controlNavbar);
+    return () => window.removeEventListener('scroll', controlNavbar);
+  }, [lastScrollY]);
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsSearchOpen(false);
+  }, [location]);
 
   const dropdownVariants = {
     hidden: { 
@@ -141,27 +166,83 @@ const Navbar = () => {
     }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: -10 },
-    visible: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -10 }
+  const mobileMenuVariants = {
+    closed: {
+      x: "100%",
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 40
+      }
+    },
+    open: {
+      x: "0%",
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 40
+      }
+    }
+  };
+
+  const searchVariants = {
+    hidden: { 
+      opacity: 0,
+      scale: 0.95,
+      y: -10
+    },
+    visible: { 
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 30
+      }
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      y: -10,
+      transition: {
+        duration: 0.2
+      }
+    }
   };
 
   return (
     <>
       <CustomCursor variant={cursorVariant} />
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-[#1A1A40]/90 backdrop-blur-lg' : 'bg-transparent'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+          isScrolled ? 'bg-[#1A1A40]/90 backdrop-blur-lg shadow-lg' : 'bg-transparent'
+        } ${showNavbar ? 'translate-y-0' : '-translate-y-full'}`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: 'spring', stiffness: 100, damping: 20 }}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
-            <Link to="/" className="text-2xl font-bold text-white">
-              Global<span className="text-[#FFD700]">Degree</span>
+            {/* Logo */}
+            <Link 
+              to="/" 
+              className="relative group"
+              onMouseEnter={() => setCursorVariant('text')}
+              onMouseLeave={() => setCursorVariant('default')}
+            >
+              <motion.div
+                className="text-2xl font-bold text-white flex items-center"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <Globe className="w-8 h-8 mr-2 text-[#FFD700]" />
+                Global<span className="text-[#FFD700]">Degree</span>
+              </motion.div>
+              <motion.div
+                className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FFD700] group-hover:w-full transition-all duration-300"
+                whileHover={{ width: "100%" }}
+              />
             </Link>
 
             {/* Desktop Menu */}
@@ -170,18 +251,42 @@ const Navbar = () => {
                 <div
                   key={item.name}
                   className="relative group"
-                  onMouseEnter={() => setHoveredItem(item.name)}
-                  onMouseLeave={() => setHoveredItem(null)}
+                  onMouseEnter={() => {
+                    setHoveredItem(item.name);
+                    setCursorVariant('text');
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredItem(null);
+                    setCursorVariant('default');
+                  }}
                 >
                   <Link
                     to={item.path}
-                    className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors"
+                    className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors relative"
                   >
-                    <span>{item.name}</span>
-                    {item.destinations && (
-                      <ChevronDown className="w-4 h-4 transform group-hover:rotate-180 transition-transform" />
-                    )}
+                    <motion.div
+                      className="flex items-center"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
+                      <item.icon className="w-4 h-4 mr-1" />
+                      <span>{item.name}</span>
+                      {item.destinations && (
+                        <ChevronDown className="w-4 h-4 ml-1 transform group-hover:rotate-180 transition-transform" />
+                      )}
+                      {item.isNew && (
+                        <span className="absolute -top-3 -right-8 bg-[#FFD700] text-[#1A1A40] text-xs px-2 py-0.5 rounded-full">
+                          New
+                        </span>
+                      )}
+                    </motion.div>
                   </Link>
+
+                  {/* Hover line effect */}
+                  <motion.div
+                    className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#FFD700] group-hover:w-full transition-all duration-300"
+                    whileHover={{ width: "100%" }}
+                  />
 
                   {/* First Level Dropdown */}
                   {item.destinations && hoveredItem === item.name && (
@@ -202,18 +307,18 @@ const Navbar = () => {
                           >
                             <Link
                               to={destination.path}
-                              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-[#FFD700]/10 transition-colors cursor-pointer flex items-center justify-between"
+                              className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 transition-colors flex items-center justify-between group-hover/item:text-[#FFD700]"
                             >
                               <span>{destination.name}</span>
                               {destination.colleges && (
-                                <ChevronRight className="w-4 h-4 text-[#FFD700] transform group-hover/item:translate-x-1 transition-transform" />
+                                <ChevronRight className="w-4 h-4 transform group-hover/item:translate-x-1 transition-transform" />
                               )}
                             </Link>
 
                             {/* Second Level Dropdown */}
                             {destination.colleges && hoveredDestination === destination.name && (
                               <motion.div
-                                className="absolute left-full top-0 ml-2 w-72 bg-[#1A1A40]/95 backdrop-blur-xl rounded-xl shadow-xl border border-[#FFD700]/10 z-50"
+                                className="absolute left-full top-0 ml-2 w-64 bg-[#1A1A40]/95 backdrop-blur-xl rounded-xl shadow-xl border border-[#FFD700]/10 overflow-hidden"
                                 variants={dropdownVariants}
                                 initial="hidden"
                                 animate="visible"
@@ -223,7 +328,7 @@ const Navbar = () => {
                                   <Link
                                     key={college.name}
                                     to={college.path}
-                                    className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-[#FFD700]/10 transition-colors cursor-pointer"
+                                    className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                                   >
                                     {college.name}
                                   </Link>
@@ -237,62 +342,117 @@ const Navbar = () => {
                   )}
                 </div>
               ))}
+
+              {/* Search Button */}
+              <motion.button
+                className="text-gray-300 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+              >
+                <Search className="w-5 h-5" />
+              </motion.button>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              className="lg:hidden text-white"
+            <motion.button
+              className="lg:hidden text-white p-2 hover:bg-white/5 rounded-full"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </motion.button>
           </div>
         </div>
-      </motion.nav>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            className="fixed inset-0 z-40 lg:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+        {/* Search Overlay */}
+        <AnimatePresence>
+          {isSearchOpen && (
             <motion.div
-              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-              onClick={() => setIsMenuOpen(false)}
-            />
-            <motion.div
-              className="absolute right-0 top-0 bottom-0 w-64 bg-[#1A1A40] shadow-xl"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 20 }}
+              className="absolute top-full left-0 right-0 bg-[#1A1A40]/95 backdrop-blur-xl border-t border-[#FFD700]/10 p-4"
+              variants={searchVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
             >
-              <div className="p-4 space-y-4">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    className="block px-4 py-2 text-gray-300 hover:text-white hover:bg-[#FFD700]/10 rounded-lg transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <item.icon className="w-5 h-5" />
-                      <span>{item.name}</span>
-                    </div>
-                  </Link>
-                ))}
+              <div className="container mx-auto max-w-3xl">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search courses, universities, or destinations..."
+                    className="w-full bg-white/10 text-white placeholder-gray-400 px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+                    autoFocus
+                  />
+                  <button className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+                    <Search className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              className="fixed inset-y-0 right-0 w-full max-w-sm bg-[#1A1A40]/95 backdrop-blur-xl shadow-xl border-l border-[#FFD700]/10 lg:hidden overflow-y-auto z-[101]"
+              variants={mobileMenuVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+            >
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-xl font-bold text-white">Menu</h2>
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+
+                {/* Mobile Search */}
+                <div className="relative mb-8">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="w-full bg-white/10 text-white placeholder-gray-400 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFD700] transition-all"
+                  />
+                  <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+                    <Search className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Mobile Menu Items */}
+                <div className="space-y-1">
+                  {menuItems.map((item) => (
+                    <div key={item.name}>
+                      <Link
+                        to={item.path}
+                        className="flex items-center justify-between px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <div className="flex items-center">
+                          <item.icon className="w-5 h-5 mr-3" />
+                          <span>{item.name}</span>
+                        </div>
+                        {item.isNew && (
+                          <span className="bg-[#FFD700] text-[#1A1A40] text-xs px-2 py-0.5 rounded-full">
+                            New
+                          </span>
+                        )}
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
     </>
   );
 };

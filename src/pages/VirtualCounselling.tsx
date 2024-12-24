@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Calendar, Clock, Video, MessageSquare, Check } from 'lucide-react';
+import { Calendar, Clock, Video, MessageSquare, Check, Star, Users, Heart, Sparkles } from 'lucide-react';
 
 const VirtualCounselling = () => {
   const [formData, setFormData] = useState({
@@ -54,16 +54,46 @@ const VirtualCounselling = () => {
     }
   };
 
+  const floatingBubbleVariants = {
+    animate: {
+      y: [-20, 20],
+      transition: {
+        y: {
+          duration: 2,
+          repeat: Infinity,
+          repeatType: "reverse",
+          ease: "easeInOut"
+        }
+      }
+    }
+  };
+
   return (
-    <div className="bg-[#1A1A40] min-h-screen">
+    <div className="bg-[#1A1A40] min-h-screen relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 pointer-events-none">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-64 h-64 bg-[#FFD700]/5 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            variants={floatingBubbleVariants}
+            animate="animate"
+          />
+        ))}
+      </div>
+
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative h-[60vh] flex items-center justify-center overflow-hidden">
+      <div className="relative h-[70vh] flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=2069&auto=format&fit=crop)',
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A40]/90 via-[#1A1A40]/80 to-[#1A1A40]" />
@@ -75,6 +105,14 @@ const VirtualCounselling = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+            className="mb-6"
+          >
+            <Sparkles className="w-16 h-16 text-[#FFD700] mx-auto" />
+          </motion.div>
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
             Virtual <span className="text-[#FFD700]">Counselling</span>
           </h1>
@@ -112,6 +150,64 @@ const VirtualCounselling = () => {
         </div>
       </motion.div>
 
+      {/* Testimonials Section */}
+      <motion.div 
+        className="container mx-auto px-4 py-16"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+      >
+        <h2 className="text-3xl font-bold text-white mb-12 text-center">What Our Clients Say</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            {
+              name: "Sarah Johnson",
+              role: "Student",
+              image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop",
+              quote: "The virtual counselling sessions helped me overcome my anxiety and perform better in my studies."
+            },
+            {
+              name: "Michael Chen",
+              role: "Professional",
+              image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
+              quote: "Flexible scheduling and professional guidance made it easy to maintain work-life balance."
+            },
+            {
+              name: "Emma Williams",
+              role: "Entrepreneur",
+              image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2070&auto=format&fit=crop",
+              quote: "The counsellor's expertise helped me navigate through challenging business decisions."
+            }
+          ].map((testimonial, index) => (
+            <motion.div
+              key={index}
+              className="bg-white/5 backdrop-blur-lg p-6 rounded-xl border border-white/10 hover:border-[#FFD700]/40 transition-all duration-300"
+              variants={itemVariants}
+              whileHover={{ y: -5 }}
+            >
+              <div className="flex items-center mb-4">
+                <img 
+                  src={testimonial.image} 
+                  alt={testimonial.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-[#FFD700]"
+                />
+                <div className="ml-4">
+                  <h3 className="text-white font-semibold">{testimonial.name}</h3>
+                  <p className="text-gray-400 text-sm">{testimonial.role}</p>
+                </div>
+              </div>
+              <p className="text-gray-300">{testimonial.quote}</p>
+              <div className="flex mt-4 text-[#FFD700]">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
       {/* Booking Form Section */}
       <motion.div 
         className="container mx-auto px-4 py-16"
@@ -128,15 +224,36 @@ const VirtualCounselling = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8"
+                transition={{
+                  duration: 0.5,
+                  type: "spring",
+                  stiffness: 200
+                }}
+                className="text-center py-12"
               >
-                <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Check className="w-8 h-8 text-green-500" />
-                </div>
-                <h3 className="text-2xl font-semibold text-white mb-2">Booking Confirmed!</h3>
-                <p className="text-gray-400">
-                  We'll send you a confirmation email with the meeting details shortly.
-                </p>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                  className="w-20 h-20 bg-gradient-to-r from-green-500/20 to-[#FFD700]/20 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <Check className="w-10 h-10 text-[#FFD700]" />
+                </motion.div>
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  <h3 className="text-3xl font-bold text-white mb-4">Booking Confirmed!</h3>
+                  <p className="text-xl text-gray-300 mb-6">
+                    Thank you for choosing our virtual counselling service.
+                  </p>
+                  <div className="space-y-2 text-gray-400">
+                    <p>✨ Check your email for session details</p>
+                    <p>📅 Calendar invite has been sent</p>
+                    <p>🎯 Prepare your questions for the session</p>
+                  </div>
+                </motion.div>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -243,13 +360,12 @@ const VirtualCounselling = () => {
                 </motion.div>
 
                 <motion.button
-                  variants={itemVariants}
+                  type="submit"
+                  className="w-full py-4 px-6 bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black font-semibold rounded-lg hover:opacity-90 transition-opacity"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  type="submit"
-                  className="w-full py-4 bg-[#FFD700] text-[#1A1A40] font-semibold rounded-lg hover:bg-[#FFD700]/90 transition-colors"
                 >
-                  Book Session
+                  Book Your Session
                 </motion.button>
               </form>
             )}
